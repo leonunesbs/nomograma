@@ -1,5 +1,7 @@
 import Image from 'next/image';
 
+import { ConeCard } from '@/components/ConeCard';
+
 const coneTypes = {
   Type1: {
     Location: 'Paracentral ou Pericentral',
@@ -146,131 +148,108 @@ export default function HomePage() {
   const { Type1, Type2 } = coneTypes;
   return (
     <div className="container mx-auto p-4 py-12 space-y-12">
-      {/* <h1 className="text-2xl font-bold text-center mb-8">Nomograma Keraring</h1> */}
+      <h1 className="text-2xl font-bold text-center mb-8">Nomograma Keraring</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="gap-4 card card-bordered card-compact h-fit">
-          <div className="card-body">
-            <div className="flex justify-center">
-              <Image src="/Type1.png" alt={Type1.TopographicAspect} width={250} height={250} />
-            </div>
-
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold">{Type1.TopographicAspect}</h2>
-              <div className="text-center py-8">
-                <strong className="">Critérios primários</strong>
-                <ul>
-                  {Type1.PrimaryCriteriaForImplantSelection.map((criterion) => (
-                    <li key={criterion}>{criterion}</li>
-                  ))}
-                </ul>
-              </div>
+        <ConeCard.Root>
+          <ConeCard.Image src="/Type1.png" alt={Type1.TopographicAspect} />
+          <div className="space-y-4">
+            <ConeCard.Title title={Type1.TopographicAspect} />
+            <ConeCard.Criteria title="Critérios primários">
+              <ul>
+                {Type1.PrimaryCriteriaForImplantSelection.map((criterion) => (
+                  <li key={criterion}>{criterion}</li>
+                ))}
+              </ul>
+            </ConeCard.Criteria>
+            <ConeCard.Summary
+              astigmaticOrthogonality={Type1.AstigmaticOrthogonality}
+              astigmaticSymmetry={Type1.AstigmaticSymmetry}
+              location={Type1.Location}
+              relationBetweenAxes={Type1.RelationBetweenAxes}
+            />
+            <div>
               <div className="overflow-x-auto">
-                <table className="table">
+                <table className="table table-xs">
                   <thead>
                     <tr>
                       <th>Tipo</th>
-                      <td>Localização</td>
-                      <td>Relação entre eixos</td>
-                      <td>Ortogonalidade</td>
-                      <td>Simetria</td>
+                      <th>Nº de segmentos</th>
+                      <th>Eixo de implantação</th>
+                      <th>Zona óptica</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>1</td>
-                      <td>{Type1.Location}</td>
-                      <td>{Type1.RelationBetweenAxes}</td>
-                      <td>{Type1.AstigmaticOrthogonality}</td>
-                      <td>{Type1.AstigmaticSymmetry}</td>
+                      <td>{Type1.ImplantSelection.NoOfSegmentsArcs}</td>
+                      <td>{Type1.ImplantSelection.AxisOfImplantation}</td>
+                      <td>
+                        {Type1.ImplantSelection.OpticalZone.map((zone) => (
+                          <p key={zone}>{zone}</p>
+                        ))}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
+            </div>
 
-              <div>
+            <div className="grid grid-cols-2 card card-bordered card-compact">
+              <div className="card-body">
+                <figure className="justify-center flex">
+                  <Image src="/Type1.1.png" alt={Type1.TopographicAspect} width={100} height={100} />
+                </figure>
                 <div className="overflow-x-auto">
                   <table className="table table-xs">
                     <thead>
                       <tr>
-                        <th>Tipo</th>
-                        <th>Nº de segmentos</th>
-                        <th>Eixo de implantação</th>
-                        <th>Zona óptica</th>
+                        <th>Cilindro (D)</th>
+                        <th>Arco / espessura</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>{Type1.ImplantSelection.NoOfSegmentsArcs}</td>
-                        <td>{Type1.ImplantSelection.AxisOfImplantation}</td>
-                        <td>
-                          {Type1.ImplantSelection.OpticalZone.map((zone) => (
-                            <p key={zone}>{zone}</p>
-                          ))}
-                        </td>
-                      </tr>
+                      {Type1.ImplantSelection.Symmetrical.AstigmatismD.map(
+                        (ast, index) =>
+                          index <= 3 && (
+                            <tr key={ast.Range}>
+                              <td>{ast.Range}</td>
+                              <td>{ast.ArcImplantThickness}</td>
+                            </tr>
+                          )
+                      )}
                     </tbody>
                   </table>
                 </div>
               </div>
-
-              <div className="grid grid-cols-2 card card-bordered card-compact">
-                <div className="card-body">
-                  <figure className="justify-center flex">
-                    <Image src="/Type1.1.png" alt={Type2.TopographicAspect} width={100} height={100} />
-                  </figure>
-                  <div className="overflow-x-auto">
-                    <table className="table table-xs">
-                      <thead>
-                        <tr>
-                          <th>Cilindro (D)</th>
-                          <th>Arco / espessura</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {Type1.ImplantSelection.Symmetrical.AstigmatismD.map(
-                          (ast, index) =>
-                            index <= 3 && (
-                              <tr key={ast.Range}>
-                                <td>{ast.Range}</td>
-                                <td>{ast.ArcImplantThickness}</td>
-                              </tr>
-                            )
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <div className="card-body">
-                  <figure className="justify-center flex">
-                    <Image src="/Type1.2.png" alt={Type2.TopographicAspect} width={100} height={100} />
-                  </figure>
-                  <div className="overflow-x-auto">
-                    <table className="table table-xs">
-                      <thead>
-                        <tr>
-                          <th>Cilindro (D)</th>
-                          <th>Arco / espessura</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {Type1.ImplantSelection.Symmetrical.AstigmatismD.map(
-                          (ast, index) =>
-                            index > 3 && (
-                              <tr key={ast.Range}>
-                                <td>{ast.Range}</td>
-                                <td>{ast.ArcImplantThickness}</td>
-                              </tr>
-                            )
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
+              <div className="card-body">
+                <figure className="justify-center flex">
+                  <Image src="/Type1.2.png" alt={Type2.TopographicAspect} width={100} height={100} />
+                </figure>
+                <div className="overflow-x-auto">
+                  <table className="table table-xs">
+                    <thead>
+                      <tr>
+                        <th>Cilindro (D)</th>
+                        <th>Arco / espessura</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Type1.ImplantSelection.Symmetrical.AstigmatismD.map(
+                        (ast, index) =>
+                          index > 3 && (
+                            <tr key={ast.Range}>
+                              <td>{ast.Range}</td>
+                              <td>{ast.ArcImplantThickness}</td>
+                            </tr>
+                          )
+                      )}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </ConeCard.Root>
         <div className="gap-4 card card-bordered card-compact h-fit">
           <div className="card-body">
             <div className="flex justify-center">
