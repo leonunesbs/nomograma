@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 import { ConeCard } from '@/components/ConeCard';
 
 const coneTypes = {
@@ -52,8 +50,8 @@ const coneTypes = {
       },
       'MeanKeratometry>52D': {
         ImplantSegments: [
-          { MeanKeratometryD: '52 ~ 54D', ArcImplantThickness: 'AS5 330 150/250 µm' },
-          { MeanKeratometryD: '≥ 55D', ArcImplantThickness: 'AS5 330 200/300 µm' },
+          { Range: '52 ~ 54D', ArcImplantThickness: 'AS5 330 150/250 µm' },
+          { Range: '≥ 55D', ArcImplantThickness: 'AS5 330 200/300 µm' },
         ],
         AxisOfImplantation: 'Centro do arco alinhado ao eixo de coma',
       },
@@ -78,8 +76,8 @@ const coneTypes = {
           },
           'MeanKeratometry>52D': {
             ImplantSegments: [
-              { MeanKeratometryD: '52 ~ 54D', ArcImplantThickness: 'AS5 330 150/250 µm' },
-              { MeanKeratometryD: '> 54D', ArcImplantThickness: 'AS5 330 200/300 µm' },
+              { Range: '52 ~ 54D', ArcImplantThickness: 'AS5 330 150/250 µm' },
+              { Range: '> 54D', ArcImplantThickness: 'AS5 330 200/300 µm' },
             ],
             AxisOfImplantation: 'Topográfico íngreme',
           },
@@ -112,10 +110,10 @@ const coneTypes = {
       SymmetricalSegment: '325º a 5mm OZ',
       AxisOfImplantation: '270º (inferior)',
       SphericalEquivalentD_MeanKeratometryD: [
-        { Range: '2 ~ 4D, < 48D', ArcImplantThickness: 'SI5 325/150 µm' },
-        { Range: '4 ~ 6D, 48 ~ 50D', ArcImplantThickness: 'SI5 325/200 µm' },
-        { Range: '6 ~ 8D, 50 ~ 52D', ArcImplantThickness: 'SI5 325/250 µm' },
-        { Range: '> 8D, > 52D', ArcImplantThickness: 'SI5 325/300 µm' },
+        { SphericalEquivalentD: '2 ~ 4D', MeanKeratometryD: '< 48D', ArcImplantThickness: 'SI5 325/150 µm' },
+        { SphericalEquivalentD: '4 ~ 6D', MeanKeratometryD: '48 ~ 50D', ArcImplantThickness: 'SI5 325/200 µm' },
+        { SphericalEquivalentD: '6 ~ 8D', MeanKeratometryD: '50 ~ 52D', ArcImplantThickness: 'SI5 325/250 µm' },
+        { SphericalEquivalentD: '> 8D', MeanKeratometryD: '> 52D', ArcImplantThickness: 'SI5 325/300 µm' },
       ],
     },
   },
@@ -145,11 +143,13 @@ const coneTypes = {
 };
 
 export default function HomePage() {
-  const { Type1, Type2 } = coneTypes;
+  const { Type1, Type2, Type3, Type4, Type5 } = coneTypes;
+
   return (
     <div className="container mx-auto p-4 py-12 space-y-12">
       <h1 className="text-2xl font-bold text-center mb-8">Nomograma Keraring</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Type 1 */}
         <ConeCard.Root>
           <ConeCard.Image src="/Type1.png" alt={Type1.TopographicAspect} />
           <div className="space-y-4">
@@ -167,210 +167,237 @@ export default function HomePage() {
               location={Type1.Location}
               relationBetweenAxes={Type1.RelationBetweenAxes}
             />
-            <div>
-              <div className="overflow-x-auto">
-                <table className="table table-xs">
-                  <thead>
-                    <tr>
-                      <th>Tipo</th>
-                      <th>Nº de segmentos</th>
-                      <th>Eixo de implantação</th>
-                      <th>Zona óptica</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>{Type1.ImplantSelection.NoOfSegmentsArcs}</td>
-                      <td>{Type1.ImplantSelection.AxisOfImplantation}</td>
-                      <td>
-                        {Type1.ImplantSelection.OpticalZone.map((zone) => (
-                          <p key={zone}>{zone}</p>
-                        ))}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 card card-bordered card-compact">
-              <div className="card-body">
-                <figure className="justify-center flex">
-                  <Image src="/Type1.1.png" alt={Type1.TopographicAspect} width={100} height={100} />
-                </figure>
-                <div className="overflow-x-auto">
-                  <table className="table table-xs">
-                    <thead>
-                      <tr>
-                        <th>Cilindro (D)</th>
-                        <th>Arco / espessura</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {Type1.ImplantSelection.Symmetrical.AstigmatismD.map(
-                        (ast, index) =>
-                          index <= 3 && (
-                            <tr key={ast.Range}>
-                              <td>{ast.Range}</td>
-                              <td>{ast.ArcImplantThickness}</td>
-                            </tr>
-                          )
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div className="card-body">
-                <figure className="justify-center flex">
-                  <Image src="/Type1.2.png" alt={Type2.TopographicAspect} width={100} height={100} />
-                </figure>
-                <div className="overflow-x-auto">
-                  <table className="table table-xs">
-                    <thead>
-                      <tr>
-                        <th>Cilindro (D)</th>
-                        <th>Arco / espessura</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {Type1.ImplantSelection.Symmetrical.AstigmatismD.map(
-                        (ast, index) =>
-                          index > 3 && (
-                            <tr key={ast.Range}>
-                              <td>{ast.Range}</td>
-                              <td>{ast.ArcImplantThickness}</td>
-                            </tr>
-                          )
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+            <div className="overflow-x-auto">
+              <table className="table table-xs">
+                <thead>
+                  <tr>
+                    <th>Tipo</th>
+                    <th>Nº de segmentos</th>
+                    <th>Eixo de implantação</th>
+                    <th>Zona óptica</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>{Type1.ImplantSelection.NoOfSegmentsArcs}</td>
+                    <td>{Type1.ImplantSelection.AxisOfImplantation}</td>
+                    <td>
+                      {Type1.ImplantSelection.OpticalZone.map((zone) => (
+                        <p key={zone}>{zone}</p>
+                      ))}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </ConeCard.Root>
-        <div className="gap-4 card card-bordered card-compact h-fit">
-          <div className="card-body">
-            <div className="flex justify-center">
-              <Image src="/Type2.png" alt={Type2.TopographicAspect} width={250} height={250} />
-            </div>
 
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold">{Type2.TopographicAspect}</h2>
-              <div className="text-center py-8">
-                <strong className="">Variáveis para seleção do implante</strong>
-                <ul>
-                  {Type2.VariablesForImplantSelection.map((variable) => (
-                    <li key={variable}>{variable}</li>
+        {/* Type 2 */}
+        <ConeCard.Root>
+          <ConeCard.Image src="/Type2.png" alt={Type2.TopographicAspect} />
+          <div className="space-y-4">
+            <ConeCard.Title title={Type2.TopographicAspect} />
+            <ConeCard.Criteria title="Variáveis para seleção do implante">
+              <ul>
+                {Type2.VariablesForImplantSelection.map((variable) => (
+                  <li key={variable}>{variable}</li>
+                ))}
+              </ul>
+            </ConeCard.Criteria>
+            <ConeCard.Summary
+              astigmaticOrthogonality={Type2.AstigmaticOrthogonality}
+              astigmaticSymmetry={Type2.AstigmaticSymmetry}
+              location={Type2.Location}
+              relationBetweenAxes={Type2.RelationBetweenAxes}
+            />
+            <div className="overflow-x-auto">
+              <table className="table table-xs">
+                <caption>Ceratometria média &lt;52D</caption>
+                <thead>
+                  <tr>
+                    <th>Cilindro (D)</th>
+                    <th>Arco / espessura</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Type2.ImplantSelection['MeanKeratometry<52D'].ImplantSegments.map((segment) => (
+                    <tr key={segment.AstigmatismD}>
+                      <td>{segment.AstigmatismD}</td>
+                      <td>{segment.ArcImplantThickness}</td>
+                    </tr>
                   ))}
-                </ul>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th>Tipo</th>
-                      <td>Localização</td>
-                      <td>Relação entre eixos</td>
-                      <td>Ortogonalidade</td>
-                      <td>Simetria</td>
+                </tbody>
+              </table>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="table table-xs">
+                <caption>Ceratometria média &gt;52D</caption>
+                <thead>
+                  <tr>
+                    <th>Ceratometria média (D)</th>
+                    <th>Arco / espessura</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Type2.ImplantSelection['MeanKeratometry>52D'].ImplantSegments.map((segment) => (
+                    <tr key={segment.Range}>
+                      <td>{segment.Range}</td>
+                      <td>{segment.ArcImplantThickness}</td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>2</td>
-                      <td>{Type2.Location}</td>
-                      <td>{Type2.RelationBetweenAxes}</td>
-                      <td>{Type2.AstigmaticOrthogonality}</td>
-                      <td>{Type2.AstigmaticSymmetry}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="grid grid-cols-1 gap-4">
-                <div className="card card-bordered card-compact">
-                  <div className="card-body">
-                    <Image
-                      src="/Type2.1.png"
-                      alt={Type2.TopographicAspect}
-                      width={110}
-                      height={50}
-                      className="mx-auto"
-                    />
-                    <div className="overflow-x-auto">
-                      <table className="table table-xs">
-                        <caption className="table-caption">Ceratometria média &lt;52D</caption>
-                        <thead>
-                          <tr>
-                            <th>Cilindro (D)</th>
-                            <th>Arco / espessura</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {Type2.ImplantSelection['MeanKeratometry<52D'].ImplantSegments.map((segment) => (
-                            <tr key={segment.AstigmatismD}>
-                              <td>{segment.AstigmatismD}</td>
-                              <td>{segment.ArcImplantThickness}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                    <div className="text-xs italic text-center">
-                      <strong>
-                        <h4>Eixo de implantação</h4>
-                      </strong>
-                      {Type2.ImplantSelection['MeanKeratometry<52D'].AxisOfImplantation.map((axis) => (
-                        <p key={axis}>{axis}</p>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="card card-bordered card-compact">
-                  <div className="card-body">
-                    <Image
-                      src="/Type2.2.png"
-                      alt={Type2.TopographicAspect}
-                      width={110}
-                      height={50}
-                      className="mx-auto"
-                    />
-
-                    <div className="overflow-x-auto">
-                      <table className="table table-xs">
-                        <caption className="table-caption">Ceratometria média &gt;52D</caption>
-                        <thead>
-                          <tr>
-                            <th>Ceratometria média (D)</th>
-                            <th>Arco / espessura</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {Type2.ImplantSelection['MeanKeratometry>52D'].ImplantSegments.map((segment) => (
-                            <tr key={segment.MeanKeratometryD}>
-                              <td>{segment.MeanKeratometryD}</td>
-                              <td>{segment.ArcImplantThickness}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                    <div className="text-xs italic text-center">
-                      <strong>
-                        <h4>Eixo de implantação</h4>
-                      </strong>
-                      <p>{Type2.ImplantSelection['MeanKeratometry>52D'].AxisOfImplantation}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
-        </div>
+        </ConeCard.Root>
+
+        {/* Type 3 */}
+        <ConeCard.Root>
+          <ConeCard.Image src="/Type3.png" alt={Type3.TopographicAspect} />
+          <div className="space-y-4">
+            <ConeCard.Title title={Type3.TopographicAspect} />
+            <ConeCard.Criteria title="Subtipos de cone tipo 3">
+              <ul>
+                <li>3A - Eixo refrativo e topográfico coincidente</li>
+                <li>3B - Eixo refrativo e topográfico perpendicular</li>
+              </ul>
+            </ConeCard.Criteria>
+            <ConeCard.Summary
+              astigmaticOrthogonality={Type3.AstigmaticOrthogonality}
+              astigmaticSymmetry={Type3.AstigmaticSymmetry}
+              location={Type3.Location}
+              relationBetweenAxes={Type3.RelationBetweenAxes}
+            />
+            <div className="overflow-x-auto">
+              <table className="table table-xs">
+                <caption>Implantes para cone 3A</caption>
+                <thead>
+                  <tr>
+                    <th>Cilindro (D)</th>
+                    <th>Arco / espessura</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Type3.SubTypes['3A'].ImplantSelection['MeanKeratometry<52D'].ImplantSegments.map((segment) => (
+                    <tr key={segment.AstigmatismD}>
+                      <td>{segment.AstigmatismD}</td>
+                      <td>{segment.ArcImplantThickness}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </ConeCard.Root>
+
+        {/* Type 4 */}
+        <ConeCard.Root>
+          <ConeCard.Image src="/Type4.png" alt={Type4.TopographicAspect} />
+          <div className="space-y-4">
+            <ConeCard.Title title={Type4.TopographicAspect} />
+            <ConeCard.Criteria title="Critérios primários para seleção de implante">
+              <ul>
+                {Type4.PrimaryCriteriaForImplantSelection.map((criterion) => (
+                  <li key={criterion}>{criterion}</li>
+                ))}
+              </ul>
+            </ConeCard.Criteria>
+            <ConeCard.Summary
+              astigmaticOrthogonality={Type4.AstigmaticOrthogonality}
+              astigmaticSymmetry={Type4.AstigmaticSymmetry}
+              location={Type4.Location}
+              relationBetweenAxes={Type4.RelationBetweenAxes}
+            />
+            <div className="overflow-x-auto">
+              <table className="table table-xs">
+                <thead>
+                  <tr>
+                    <th>Sph. Eq. (D)</th>
+                    <th>Ceratometria média (D)</th>
+                    <th>Arco / espessura</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Type4.ImplantSelection.SphericalEquivalentD_MeanKeratometryD.map((selection) => (
+                    <tr key={selection.SphericalEquivalentD}>
+                      <td>{selection.SphericalEquivalentD}</td>
+                      <td>{selection.MeanKeratometryD}</td>
+                      <td>{selection.ArcImplantThickness}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </ConeCard.Root>
+
+        {/* Type 5 */}
+        <ConeCard.Root>
+          <ConeCard.Image src="/Type5.png" alt={Type5.TopographicAspect} />
+          <div className="space-y-4">
+            <ConeCard.Title title={Type5.TopographicAspect} />
+            <ConeCard.Criteria title="Critérios primários para seleção de implante">
+              <ul>
+                {Type5.PrimaryCriteriaForImplantSelection.map((criterion) => (
+                  <li key={criterion}>{criterion}</li>
+                ))}
+              </ul>
+            </ConeCard.Criteria>
+            <ConeCard.Summary
+              astigmaticOrthogonality={Type5.AstigmaticOrthogonality}
+              astigmaticSymmetry={Type5.AstigmaticSymmetry}
+              location={Type5.Location}
+              relationBetweenAxes={Type5.RelationBetweenAxes}
+            />
+            <div className="overflow-x-auto">
+              <table className="table table-xs">
+                <thead>
+                  <tr>
+                    <th>Cilindro (D)</th>
+                    <th>Arco / espessura</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Type5.ImplantSelection.Astigmatism.map((ast) => (
+                    <tr key={ast.Range}>
+                      <td>{ast.Range}</td>
+                      <td>{ast.ImplantThickness}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </ConeCard.Root>
       </div>
+
+      {/* Seção de Informações Complementares */}
+      <section className="mt-12">
+        <h2 className="text-xl font-bold">Informações Complementares</h2>
+        <ul className="list-disc pl-6 mt-4">
+          <li>
+            <strong>Classificação Alfonso:</strong> Define cinco tipos de ceratocone com base em parâmetros tomográficos
+            e outros critérios.
+          </li>
+          <li>
+            <strong>Tomografia Corneana:</strong> Análise de múltiplas variáveis, como curvatura axial e elevação
+            anterior e posterior, é essencial para o planejamento cirúrgico.
+          </li>
+          <li>
+            <strong>Aberrometria:</strong> Magnitude e eixo do coma devem ser considerados na escolha do implante.
+          </li>
+          <li>
+            <strong>Técnicas Cirúrgicas:</strong> Planejamento assistido por laser de femtosegundo ou dissecção mecânica
+            deve seguir diretrizes específicas de profundidade e espessura da córnea.
+          </li>
+          <li>
+            <strong>Ferramenta de Planejamento:</strong> O aplicativo Keraring Assistant ajuda no planejamento
+            personalizado e oferece suporte ao cirurgião.
+          </li>
+        </ul>
+      </section>
     </div>
   );
 }
